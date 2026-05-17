@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kido Community | Compte rendu Ito Yuketsu</title>
+    
+    <link rel="icon" type="image/jpeg" href="https://imgur.com/Cl4RqsF.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Sans+JP:wght@300;700&family=Shojumaru&family=Cormorant+Garamond:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --mist-primary: #a3c9c9;
+            --mist-accent: #688f8f;
+            --mist-glow: rgba(163, 201, 201, 0.4);
+            --dark-fog: #1a1f21;
+            --bg-base: #2c3539;
+            --glass: rgba(255, 255, 255, 0.03);
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        html { scroll-behavior: smooth; }
+        * { cursor: default; box-sizing: border-box; }
+
+        body {
+            color: #e0e6e9;
+            font-family: 'Noto Sans JP', sans-serif;
+            margin: 0;
+            background-color: var(--bg-base);
+            overflow-x: hidden;
+            letter-spacing: 0.5px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #mist-particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .vignette {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.4) 100%);
+            z-index: 2; pointer-events: none;
+        }
+
+        /* --- NAVBAR --- */
+        header {
+            position: fixed; width: 100%; padding: 20px 60px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000;
+        }
+
+        .logo-top { 
+            height: 70px; 
+            filter: drop-shadow(0 0 10px var(--mist-glow));
+        }
+
+        /* --- HERO SECTION --- */
+        .hero { 
+            position: relative; z-index: 3; height: 100vh; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            text-align: center;
+        }
+
+        .mist-title { 
+            font-family: 'Shojumaru', cursive; 
+            font-size: clamp(2.5rem, 8vw, 4.5rem); 
+            color: #fff;
+            margin: 0;
+            text-shadow: 0 0 30px var(--mist-glow);
+        }
+
+        .hero-author {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            letter-spacing: 6px;
+            color: var(--mist-primary);
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        /* --- CARDS GRID --- */
+        .main-section { position: relative; z-index: 3; padding: 100px 10%; }
+
+        .lore-grid { 
+            display: flex;
+            justify-content: center;
+        }
+
+        .clickable-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid rgba(163, 201, 201, 0.1);
+            padding: 50px 30px;
+            text-decoration: none; color: inherit;
+            transition: var(--transition-smooth);
+            border-radius: 4px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            display: flex; flex-direction: column; align-items: center;
+            width: 400px;
+        }
+
+        .clickable-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--mist-primary);
+            background: rgba(163, 201, 201, 0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .logo-spell-grid { 
+            width: 120px; height: 120px; 
+            border-radius: 50%; 
+            margin-bottom: 30px; 
+            border: 1px solid var(--mist-accent);
+            padding: 5px;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        .clickable-card:hover .logo-spell-grid { transform: rotate(15deg) scale(1.1); }
+
+        .clickable-card h3 { font-family: 'Cinzel', serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; margin: 10px 0; }
+        .clickable-card p { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #b0c4c4; margin: 0; }
+
+        /* --- MODAL --- */
+        .details-section { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(10, 15, 17, 0.98); z-index: 3000;
+            display: none; align-items: flex-start; justify-content: center;
+            overflow-y: auto; padding: 60px 20px;
+            opacity: 0; transition: opacity 0.5s ease;
+        }
+        .details-section:target { display: flex; opacity: 1; }
+
+        .content-box {
+            max-width: 900px; 
+            background: rgba(255, 255, 255, 0.02);
+            padding: 60px; 
+            border: 1px solid var(--mist-accent);
+            position: relative;
+            backdrop-filter: blur(20px);
+            margin-bottom: 60px;
+        }
+
+        .lore-text h4 {
+            font-family: 'Cinzel', serif;
+            color: var(--mist-primary);
+            margin: 30px 0 15px 0;
+            border-bottom: 1px solid var(--mist-glow);
+            display: block;
+            letter-spacing: 2px;
+        }
+
+        .lore-text p {
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 1.2rem; 
+            line-height: 1.7; 
+            color: #d1d9e0; 
+            text-align: justify;
+            margin-bottom: 18px;
+        }
+
+        .info-label { color: var(--mist-primary); font-weight: bold; font-family: 'Cinzel'; font-size: 0.9rem; }
+
+        .btn-close {
+            display: inline-block; padding: 12px 40px; margin-top: 40px;
+            border: 1px solid var(--mist-primary);
+            color: var(--mist-primary); text-decoration: none;
+            font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 3px;
+            transition: 0.4s;
+        }
+        .btn-close:hover { background: var(--mist-primary); color: #1a1f21; }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="mist-particles"></canvas>
+    <div class="vignette"></div>
+
+    <header id="navbar">
+        <img src="https://imgur.com/Cl4RqsF.png" alt="Kido Logo" class="logo-top">
+    </header>
+
+    <section id="home" class="hero">
+        <h1 class="mist-title" data-aos="zoom-in">Compte rendu Ito Yuketsu</h1>
+        <div class="hero-author" data-aos="fade-up" data-aos-delay="300">Rapport</div>
+    </section>
+
+    <section id="lore" class="main-section">
+        <div class="lore-grid">
+            <a href="#details-yuketsu" class="clickable-card" data-aos="fade-up">
+                <img src="https://imgur.com/UgNCxqf.png" class="logo-spell-grid" alt="Ito Yuketsu">
+                <h3>Information</h3>
+                <p>Nom : Ito Yuketsu<br>Rang : Kanoe<br>Respiration : Souffle du Son<br>Âge : 12 ans</p>
+            </a>
+        </div>
+    </section>
+
+    <section id="details-yuketsu" class="details-section">
+        <div class="content-box">
+            <img src="https://imgur.com/UgNCxqf.png" style="width: 100px; display: block; margin: 0 auto 20px; border-radius: 50%; border: 1px solid var(--mist-primary);">
+            <h2 style="text-align: center; font-family: 'Cinzel'; color: #fff; letter-spacing: 5px; margin-bottom: 40px;">ITO YUKETSU</h2>
+            
+            <div class="lore-text">
+                <p><span class="info-label">Nom :</span> Ito Yuketsu</p>
+                <p><span class="info-label">Rang :</span> Kanoe</p>
+                <p><span class="info-label">Respiration :</span> Souffle du Son</p>
+                <p><span class="info-label">Âge :</span> 12 ans</p>
+                
+                <h4>Description Générale</h4>
+                <p>Ito Yuketsu est un jeune pourfendeur vêtu d’un haori blanc et doré. Ses cheveux blonds ainsi que ses yeux d’un doré brillant lui confèrent une apparence particulièrement marquante. Malgré son jeune âge, il dégage une certaine chaleur humaine qui contraste avec l’attitude réservée qu’il adopte lors des premiers contacts.</p>
+                <p>Une fois la méfiance initiale dissipée, le sujet se révèle particulièrement enfantin et sociable. Il apprécie plaisanter avec les autres membres du Corps et semble entretenir des relations globalement positives avec son entourage.</p>
+                
+                <h4>Comportement Observé</h4>
+                <p>Le sujet presents une personnalité énergique et légère. Il manifeste un goût prononcé pour les sucreries, notamment les bonbons au caramel, au point que cela pourrait être considéré comme une forme d’addiction mineure.</p>
+                <p>Malgré cette attitude insouciante, Yuketsu demeure un combattant agile et discipliné lorsqu’il est confronté à des situations sérieuses. Son comportement laisse penser à une volonté sincère de préserver ses proches de la haine et de la souffrance, motivation qui semble profondément liée à son engagement au sein du Corps des Pourfendeurs.</p>
+
+                <h4>Origines et Environnement Familial</h4>
+                <p>Le sujet est issu d’une famille de pourfendeurs ; son père comme sa mère appartiennent ou appartenaient au Corps. D’après les informations récoltées, il ne semble pas avoir réellement eu le choix quant à son intégration dans l’armée.</p>
+                <p>Des rumeurs persistantes entourent toutefois sa mère, décrite comme une femme crainte voire détestée par une partie de son entourage. Cette réputation proviendrait d’un tempérament extrêmement exigeant ainsi que de méthodes d’enseignement jugées peu orthodoxes.</p>
+                <p>Les détails exacts concernant l’histoire familiale du sujet demeurent encore flous et mériteraient une enquête plus approfondie.</p>
+
+                <h4>Capacités et Ambitions</h4>
+                <p>Ito Yuketsu maîtrise le Souffle du Son et nourrit l’ambition de devenir le premier Pilier à représenter officiellement cette respiration.</p>
+                <p>Au-delà de cet objectif, le sujet semble animé par un idéal plus personnel : apporter la paix dans le cœur des autres et empêcher ses camarades de sombrer dans la haine ou la douleur.</p>
+                <p>Cette combinaison entre ambition martiale et volonté protectrice fait de lui un individu particulièrement prometteur.</p>
+
+                <h4>Relations Connues</h4>
+                <p>Le sujet paraît apprécié par la majorité des membres du Corps.</p>
+                <p>Il a notamment été aperçu à plusieurs reprises en compagnie d’une Tsuchinoto du Souffle du Vent nommée Kokomi Toyama. Les deux individus semblent entretenir une relation amicale solide.</p>
+
+                <h4>Conclusion de l’Observateur</h4>
+                <p>À ce jour, plusieurs éléments concernant Ito Yuketsu demeurent inconnus, en particulier au sujet de son passé familial. Toutefois, les observations effectuées jusqu’à présent indiquent qu’il s’agit d’un pourfendeur talentueux et prometteur.</p>
+                <p>Son jeune âge, ses capacités, ainsi que son état d’esprit atypique méritent une attention particulière. Je continuerai de garder un œil sur cet individu au cas où des événements notables viendraient à émerger autour de lui.</p>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="#lore" class="btn-close">REVENIR AUX ARCHIVES</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        /* PARTICLES */
+        const canvas = document.getElementById('mist-particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let w, h;
+
+        function initCanvas() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.size = Math.random() * 100 + 50;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.1;
+                this.opacity = Math.random() * 0.08;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x < -150) this.x = w + 150; if (this.x > w + 150) this.x = -150;
+            }
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = '#a3c9c9'; ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            particles = [];
+            for(let i=0; i<40; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, w, h);
+            for(let p of particles) { p.update(); p.draw(); }
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => { initCanvas(); createParticles(); });
+        initCanvas(); createParticles(); animate();
+    </script>
+</body>
+</html>
